@@ -1,10 +1,11 @@
-﻿using Cappic.Data;
+﻿
 using Cappic.DataAccess.Repository.IRepository;
 using Cappic.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cappic.Controllers
+namespace Cappic.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -48,7 +49,7 @@ namespace Cappic.Controllers
                 return NotFound();
             }
 
-            Category? categoryFromDb = _unitOfWork.Category.Get(u=>u.Id==id);
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
 
             if (categoryFromDb == null)
             {
@@ -76,7 +77,7 @@ namespace Cappic.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _unitOfWork.Category.Get(u=>u.Id==id);
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
 
             if (categoryFromDb == null)
             {
