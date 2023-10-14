@@ -10,8 +10,8 @@ namespace Cappic.Data
         {
         }
 
-        public DbSet<Category> Categories { get; set; }
-
+        public DbSet<Lens> Lenses { get; set; }
+        public DbSet<Product> Products { get; set; }
 
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Cappic.DataAccess.Repository.IRepository
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface ILensRepository : IRepository<Lens>
     {
-        void Update(Category obj);
+        void Update(Lens obj);
         
     }
 }

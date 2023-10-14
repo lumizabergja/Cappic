@@ -8,7 +8,8 @@ namespace Cappic.DataAccess.Repository.IRepository
 {
     public interface IUnitOfWork
     {
-        ICategoryRepository Category { get; }
+        ILensRepository Lens { get; }
+        IProductRepository Product { get; }
         void Save();
     }
 }

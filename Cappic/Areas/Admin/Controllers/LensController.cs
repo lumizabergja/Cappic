@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace Cappic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+    public class LensController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CategoryController(IUnitOfWork unitOfWork)
+        public LensController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
+            List<Lens> objCategoryList = _unitOfWork.Lens.GetAll().ToList();
             return View(objCategoryList);
         }
 
@@ -24,18 +24,14 @@ namespace Cappic.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(Lens obj)
         {
-            if (obj.Name == obj.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name.");
-            }
 
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Lens.Add(obj);
                 _unitOfWork.Save();
-                TempData["success"] = "Category created successfully";
+                TempData["success"] = "Lens created successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -49,22 +45,22 @@ namespace Cappic.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
+            Lens? lensFromDb = _unitOfWork.Lens.Get(u => u.Id == id);
 
-            if (categoryFromDb == null)
+            if (lensFromDb == null)
             {
                 return NotFound();
             }
-            return View(categoryFromDb);
+            return View(lensFromDb);
         }
         [HttpPost]
-        public IActionResult Edit(Category obj)
+        public IActionResult Edit(Lens obj)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Lens.Update(obj);
                 _unitOfWork.Save();
-                TempData["success"] = "Category updated successfully";
+                TempData["success"] = "Lens updated successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -77,25 +73,25 @@ namespace Cappic.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
+            Lens? lensFromDb = _unitOfWork.Lens.Get(u => u.Id == id);
 
-            if (categoryFromDb == null)
+            if (lensFromDb == null)
             {
                 return NotFound();
             }
-            return View(categoryFromDb);
+            return View(lensFromDb);
         }
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Category? obj = _unitOfWork.Category.Get(u => u.Id == id);
+            Lens? obj = _unitOfWork.Lens.Get(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Lens.Remove(obj);
             _unitOfWork.Save();
-            TempData["success"] = "Category deleted successfully";
+            TempData["success"] = "Lens deleted successfully";
             return RedirectToAction("Index");
         }
     }
