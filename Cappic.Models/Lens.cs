@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cappic.Models
 {
@@ -11,6 +12,7 @@ namespace Cappic.Models
         public double Price { get; set; }
         public string SerialNumber { get; set; }
         public string Description { get; set; }
+        [ValidateNever]
         public string ImageUrl { get; set; }
 
 

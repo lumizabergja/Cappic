@@ -10,10 +10,12 @@ namespace Cappic.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductController : Controller
     {
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -35,11 +37,22 @@ namespace Cappic.Areas.Admin.Controllers
             return View(productVM);
         }
         [HttpPost]
-        public IActionResult Create(ProductVM productVM)
+        public IActionResult Create(ProductVM productVM, IFormFile? file)
         {
-
+            
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if( file!=null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+                    using(var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
+                }
                 _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
@@ -63,21 +76,39 @@ namespace Cappic.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-
-            if (productFromDb == null)
+            ProductVM productVM = new()
+            {
+                LensList = _unitOfWork.Lens.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
+                Product = _unitOfWork.Product.Get(u => u.Id == id)
+            };
+            
+            if (productVM.Product == null)
             {
                 return NotFound();
             }
-            return View(productFromDb);
+            return View(productVM);
         }
         [HttpPost]
-        public IActionResult Edit(Product obj)
+        public IActionResult Edit(ProductVM obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Update(obj);
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\product");
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    obj.Product.ImageUrl = @"\images\product\" + fileName;
+                }
+                _unitOfWork.Product.Update(obj.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product updated successfully";
                 return RedirectToAction("Index");

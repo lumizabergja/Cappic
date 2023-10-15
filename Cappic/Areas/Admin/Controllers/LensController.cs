@@ -1,6 +1,7 @@
 ﻿
 using Cappic.DataAccess.Repository.IRepository;
 using Cappic.Models;
+using Cappic.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cappic.Areas.Admin.Controllers
@@ -8,10 +9,12 @@ namespace Cappic.Areas.Admin.Controllers
     [Area("Admin")]
     public class LensController : Controller
     {
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IUnitOfWork _unitOfWork;
-        public LensController(IUnitOfWork unitOfWork)
+        public LensController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -24,11 +27,22 @@ namespace Cappic.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Lens obj)
+        public IActionResult Create(Lens obj, IFormFile? file)
         {
 
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\lens");
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    obj.ImageUrl = @"\images\lens\" + fileName;
+                }
                 _unitOfWork.Lens.Add(obj);
                 _unitOfWork.Save();
                 TempData["success"] = "Lens created successfully";
@@ -54,10 +68,21 @@ namespace Cappic.Areas.Admin.Controllers
             return View(lensFromDb);
         }
         [HttpPost]
-        public IActionResult Edit(Lens obj)
+        public IActionResult Edit(Lens obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath = Path.Combine(wwwRootPath, @"images\lens");
+                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    obj.ImageUrl = @"\images\lens\" + fileName;
+                }
                 _unitOfWork.Lens.Update(obj);
                 _unitOfWork.Save();
                 TempData["success"] = "Lens updated successfully";

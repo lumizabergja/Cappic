@@ -9,7 +9,7 @@
     </div>
     </div>
     <div class="card-body p-4">
-        <form method="post" class="row">
+        <form method="post" class="row" enctype="multipart/form-data">
             <div class="border p-3">
                 @*<div asp-validation-summary="ModelOnly"></div>*@
                 <div class="form-floating py-2 col-12">
@@ -22,10 +22,9 @@
                     <label asp-for="Product.Type" class="ms-2"></label>
                     <span asp-validation-for="Product.Type" class="text-danger"></span>
                 </div>
-                <div class="form-floating py-2 col-12">
-                    <input asp-for="Product.Description" class="form-control border-0 shadow" />
-                    <label asp-for="Product.Description" class="ms-2"></label>
-                    <span asp-validation-for="Product.Description" class="text-danger"></span>
+                <div class="py-2 col-12">
+                    <label asp-for="Product.Description" class="ms-2 text-muted"></label>
+                    <textarea asp-for="Product.Description" class="form-control border-0 shadow"></textarea>
                 </div>
                 <div class="form-floating py-2 col-12">
                     <input asp-for="Product.SerialNumber" class="form-control border-0 shadow" />
@@ -45,9 +44,8 @@
                     <span asp-validation-for="Product.Price" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-2 col-12">
-                    <input asp-for="Product.ImageUrl" class="form-control border-0 shadow" />
+                    <input type="file" name="file" class="form-control border-0 shadow" />
                     <label asp-for="Product.ImageUrl" class="ms-2"></label>
-                    <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
                 </div>
                 <div class="row pt-2">
                     <div class="col-6 col-md-3">
@@ -70,6 +68,20 @@
 
 
 @section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'ai tinycomments mentions anchor autolink charmap codesample emoticons   lists  searchreplace table visualblocks wordcount checklist  casechange export   permanentpen footnotes     tableofcontents mergetags powerpaste tinymcespellchecker autocorrect   inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | tinycomments | checklist numlist bullist indent outdent | emoticons charmap ',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant"))
+        });
+    </script>
     @{
     <partial name="_ValidationScriptsPartial"/>
     }

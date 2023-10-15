@@ -19,6 +19,7 @@ namespace Cappic.Models
         public int? LensId { get; set; }
         [ValidateNever]
         public Lens? Lens { get; set; }
+        [ValidateNever]
         public string ImageUrl { get; set; }
 
 
