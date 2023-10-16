@@ -13,7 +13,7 @@ function loadDataTable() {
             { data: 'type', "width": "15%" },
             { data: 'description', "width": "10%" },
             { data: 'serialNumber', "width": "20%" },
-            { data: 'lens.name', "width": "15%" }
+            { data: 'lens.name', "width": "15%" },
             { data: 'price', "width": "15%" }
         ]
     });

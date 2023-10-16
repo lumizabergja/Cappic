@@ -133,10 +133,12 @@ namespace Cappic.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         #region API CALLS
+
+        [HttpGet]
         public IActionResult GetAll()
         {
-            List<Lens> objCategoryList = _unitOfWork.Lens.GetAll().ToList();
-            return Json(new { data = objCategoryList });
+            List<Lens> objLensList = _unitOfWork.Lens.GetAll().ToList();
+            return Json(new { data = objLensList });
         }
 
         #endregion
