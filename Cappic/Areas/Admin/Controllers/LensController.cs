@@ -77,6 +77,19 @@ namespace Cappic.Areas.Admin.Controllers
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productPath = Path.Combine(wwwRootPath, @"images\lens");
+
+                    if (string.IsNullOrEmpty(obj.ImageUrl))
+                    {
+                        //Delete the old Image
+                        var oldImagePath =
+                            Path.Combine(wwwRootPath, obj.ImageUrl.TrimStart('\\'));
+
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -119,5 +132,13 @@ namespace Cappic.Areas.Admin.Controllers
             TempData["success"] = "Lens deleted successfully";
             return RedirectToAction("Index");
         }
+        #region API CALLS
+        public IActionResult GetAll()
+        {
+            List<Lens> objCategoryList = _unitOfWork.Lens.GetAll().ToList();
+            return Json(new { data = objCategoryList });
+        }
+
+        #endregion
     }
 }

@@ -4,6 +4,7 @@ using Cappic.Models;
 using Cappic.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Cappic.Areas.Admin.Controllers
 {
@@ -19,7 +20,7 @@ namespace Cappic.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> objCategoryList = _unitOfWork.Product.GetAll().ToList();
+            List<Product> objCategoryList = _unitOfWork.Product.GetAll(includeProperties:"Lens").ToList();
             return View(objCategoryList);
         }
 
@@ -102,6 +103,19 @@ namespace Cappic.Areas.Admin.Controllers
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                    if (string.IsNullOrEmpty(obj.Product.ImageUrl))
+                    {
+                        //Delete the old Image
+                        var oldImagePath = 
+                            Path.Combine(wwwRootPath, obj.Product.ImageUrl.TrimStart('\\'));
+
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
@@ -144,5 +158,16 @@ namespace Cappic.Areas.Admin.Controllers
             TempData["success"] = "Product deleted successfully";
             return RedirectToAction("Index");
         }
+
+        #region API CALLS
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Lens").ToList();
+            return Json(new { data = objProductList });
+        }
+
+        #endregion
     }
 }

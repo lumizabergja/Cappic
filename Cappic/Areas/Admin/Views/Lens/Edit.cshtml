@@ -10,6 +10,7 @@
     <div class="card-body p-4">
         <form method="post" enctype="multipart/form-data">
             <input asp-for="Id" hidden />
+            <input asp-for="ImageUrl" hidden/>
             <div class="row">
                 <div class="col-10">
                     <div class="border p-3 mt-4">
@@ -42,7 +43,6 @@
                             <input type="file" name="file" class="form-control border-0 shadow" />
                             <label asp-for="ImageUrl" class="ms-2"></label>
                         </div>
-
                         <div class="row mt-3">
                             <div class="col-6 col-md-3">
                                 <button type="submit" class="btn btn-dark form-control">Update</button>
@@ -55,12 +55,9 @@
                         </div>
                 </div>
             </div>
-            <div class="col-2">
+                <div class="col-2">
                     <img src="@Model.ImageUrl" width="100%" style="border-radius:5px; border:1px solid #bbb9b9"/>
-            </div>
-            
-
-
+                </div>
             </div>
         </form>
     </div>
