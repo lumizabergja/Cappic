@@ -107,31 +107,27 @@ namespace Cappic.Areas.Admin.Controllers
 
         public IActionResult Delete(int? id)
         {
-            if (id == null || id == 0)
+            var lensToBeDeleted = _unitOfWork.Lens.Get(u => u.Id == id);
+            if (lensToBeDeleted == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Error while deleting" });
             }
-            Lens? lensFromDb = _unitOfWork.Lens.Get(u => u.Id == id);
 
-            if (lensFromDb == null)
+            var oldImagePath =
+                           Path.Combine(_webHostEnvironment.WebRootPath,
+                           lensToBeDeleted.ImageUrl.TrimStart('\\'));
+
+            if (System.IO.File.Exists(oldImagePath))
             {
-                return NotFound();
+                System.IO.File.Delete(oldImagePath);
             }
-            return View(lensFromDb);
-        }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int? id)
-        {
-            Lens? obj = _unitOfWork.Lens.Get(u => u.Id == id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-            _unitOfWork.Lens.Remove(obj);
+
+            _unitOfWork.Lens.Remove(lensToBeDeleted);
             _unitOfWork.Save();
-            TempData["success"] = "Lens deleted successfully";
-            return RedirectToAction("Index");
+
+            return Json(new { success = true, message = "Delete Successful" });
         }
+        
         #region API CALLS
 
         [HttpGet]
