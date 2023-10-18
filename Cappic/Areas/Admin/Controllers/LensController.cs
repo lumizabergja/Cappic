@@ -2,11 +2,14 @@
 using Cappic.DataAccess.Repository.IRepository;
 using Cappic.Models;
 using Cappic.Models.ViewModels;
+using Cappic.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cappic.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.AdminRole)]
     public class LensController : Controller
     {
         private readonly IWebHostEnvironment _webHostEnvironment;

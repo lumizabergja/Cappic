@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Cappic.Utility
 {
-    internal class SD
+    public static class SD
     {
+        public const string CustomerRole = "Customer";
+        public const string AdminRole = "Admin";
     }
 }
