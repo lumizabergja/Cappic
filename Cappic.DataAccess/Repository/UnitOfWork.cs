@@ -14,11 +14,15 @@ namespace Cappic.DataAccess.Repository
         private ApplicationDbContext _db;
         public ILensRepository Lens { get; private set; }
         public IProductRepository Product { get; private set; }
+        public IShoppingCartRepository ShoppingCart { get; private set; }
+        public IApplicationUserRepository ApplicationUser { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             Lens = new LensRepository(_db);
             Product = new ProductRepository(_db);
+            ShoppingCart = new ShoppingCartRepository(_db);
+            ApplicationUser = new ApplicationUserRepository(_db);
         }
 
         public void Save()

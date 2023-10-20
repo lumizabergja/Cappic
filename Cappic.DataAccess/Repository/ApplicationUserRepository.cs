@@ -12,17 +12,13 @@ using System.Threading.Tasks;
 
 namespace Cappic.DataAccess.Repository
 {
-    public class LensRepository : Repository<Lens>, ILensRepository
+    public class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUserRepository
     {
         private ApplicationDbContext _db;
-        public LensRepository(ApplicationDbContext db) : base(db)
+        public ApplicationUserRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public void Update(Lens obj)
-        {
-            _db.Lenses.Update(obj);
-        }
     }
 }

@@ -9,6 +9,7 @@ namespace Cappic.DataAccess.Repository.IRepository
     public interface IUnitOfWork
     {
         ILensRepository Lens { get; }
+        IShoppingCartRepository ShoppingCart { get; }
         IProductRepository Product { get; }
         void Save();
     }

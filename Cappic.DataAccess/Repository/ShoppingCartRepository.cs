@@ -9,20 +9,26 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using BulkyBook.Models;
 
 namespace Cappic.DataAccess.Repository
 {
-    public class LensRepository : Repository<Lens>, ILensRepository
+    public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
     {
         private ApplicationDbContext _db;
-        public LensRepository(ApplicationDbContext db) : base(db)
+        public ShoppingCartRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public void Update(Lens obj)
+        public void Save()
         {
-            _db.Lenses.Update(obj);
+            _db.SaveChanges();
+        }
+
+        public void Update(ShoppingCart obj)
+        {
+            _db.ShoppingCarts.Update(obj);
         }
     }
 }

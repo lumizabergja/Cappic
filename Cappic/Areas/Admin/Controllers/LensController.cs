@@ -87,7 +87,7 @@ namespace Cappic.Areas.Admin.Controllers
                         var oldImagePath =
                             Path.Combine(wwwRootPath, obj.ImageUrl.TrimStart('\\'));
 
-                        if (System.IO.File.Exists(oldImagePath))
+                        if (System.IO.File.Exists(oldImagePath))                                                                                 
                         {
                             System.IO.File.Delete(oldImagePath);
                         }

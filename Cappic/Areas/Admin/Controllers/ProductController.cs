@@ -89,7 +89,7 @@ namespace Cappic.Areas.Admin.Controllers
                 }),
                 Product = _unitOfWork.Product.Get(u => u.Id == id)
             };
-            
+
             if (productVM.Product == null)
             {
                 return NotFound();
@@ -131,7 +131,7 @@ namespace Cappic.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             return View();
-
+                                                                                      
         }
 
         public IActionResult Delete(int? id)
@@ -141,7 +141,7 @@ namespace Cappic.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Error while deleting" });
             }
-
+                                 
             var oldImagePath =
                            Path.Combine(_webHostEnvironment.WebRootPath,
                            productToBeDeleted.ImageUrl.TrimStart('\\'));

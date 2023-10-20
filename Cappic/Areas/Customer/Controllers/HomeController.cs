@@ -1,4 +1,5 @@
-﻿using Cappic.DataAccess.Repository.IRepository;
+﻿using BulkyBook.Models;
+using Cappic.DataAccess.Repository.IRepository;
 using Cappic.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -25,8 +26,13 @@ namespace Cappic.Areas.Customer.Controllers
 
         public IActionResult Details(int productId)
         {
-            Product product = _unitOfWork.Product.Get(u=>u.Id==productId,includeProperties: "Lens");
-            return View(product);
+            ShoppingCart cart = new()
+            {
+                Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Lens"),
+                Count = 1,
+                ProductId = productId
+            };
+            return View(cart);
         }
 
         public IActionResult Privacy()
